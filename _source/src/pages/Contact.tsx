@@ -1,7 +1,59 @@
+import { useState } from "react";
 import Layout from "@/components/Layout";
 import oliveBranch from "@/assets/olive-branch.png";
+import { useToast } from "@/hooks/use-toast";
 
 const Contact = () => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    reason: "I want to book a coaching call",
+    message: ""
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/web/contact.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        toast({
+          title: "Message Sent! 💛",
+          description: "Thank you! Angela will be in touch soon.",
+        });
+        // Clear form
+        setFormData({ name: "", email: "", reason: "I want to book a coaching call", message: "" });
+      } else {
+        throw new Error(result.message || "Failed to send message.");
+      }
+    } catch (error: any) {
+      console.error("Error submitting form:", error);
+      toast({
+        variant: "destructive",
+        title: "Oops!",
+        description: error.message || "Something went wrong. Please try again later.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <Layout>
       <section className="py-20 px-4 bg-background">
@@ -27,17 +79,14 @@ const Contact = () => {
 
             {/* Form */}
             <div className="bg-card rounded-lg border border-border p-8">
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  alert("Thank you! Angela will be in touch soon. 💛");
-                }}
-                className="space-y-5"
-              >
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
                   <label className="font-body text-sm font-bold text-foreground block mb-1.5">Name</label>
                   <input
                     type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     required
                     className="w-full font-body text-sm bg-background border border-border rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
                     placeholder="Your full name"
@@ -47,6 +96,9 @@ const Contact = () => {
                   <label className="font-body text-sm font-bold text-foreground block mb-1.5">Email</label>
                   <input
                     type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     required
                     className="w-full font-body text-sm bg-background border border-border rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
                     placeholder="you@email.com"
@@ -55,17 +107,24 @@ const Contact = () => {
                 <div>
                   <label className="font-body text-sm font-bold text-foreground block mb-1.5">What brings you here?</label>
                   <select
+                    name="reason"
+                    value={formData.reason}
+                    onChange={handleChange}
                     className="w-full font-body text-sm bg-background border border-border rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
                   >
-                    <option>I want to book a coaching call</option>
-                    <option>I'm interested in your products</option>
-                    <option>I want to join the VIP newsletter</option>
-                    <option>Just saying hello!</option>
+                    <option value="I want to book a coaching call">I want to book a coaching call</option>
+                    <option value="I'm interested in your products">I'm interested in your products</option>
+                    <option value="I want to join the VIP newsletter">I want to join the VIP newsletter</option>
+                    <option value="Just saying hello!">Just saying hello!</option>
                   </select>
                 </div>
                 <div>
                   <label className="font-body text-sm font-bold text-foreground block mb-1.5">Message</label>
                   <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
                     rows={4}
                     className="w-full font-body text-sm bg-background border border-border rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors resize-none"
                     placeholder="Tell me a bit about yourself and your health goals..."
@@ -73,9 +132,10 @@ const Contact = () => {
                 </div>
                 <button
                   type="submit"
-                  className="w-full font-body font-bold text-sm uppercase tracking-wider bg-primary text-primary-foreground px-6 py-4 rounded-md hover:opacity-90 transition-opacity"
+                  disabled={isSubmitting}
+                  className="w-full flex justify-center items-center font-body font-bold text-sm uppercase tracking-wider bg-primary text-primary-foreground px-6 py-4 rounded-md hover:opacity-90 disabled:opacity-50 transition-opacity"
                 >
-                  Send Message
+                  {isSubmitting ? "Sending..." : "Send Message"}
                 </button>
               </form>
             </div>
