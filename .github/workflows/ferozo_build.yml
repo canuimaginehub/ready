@@ -36,8 +36,8 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           
-          # Agrega el nuevo index.html y la carpeta assets/ generados en la raíz
-          git add index.html assets/
+          # Agrega el nuevo index.html, la carpeta assets/ y archivos de la carpeta public
+          git add index.html assets/ *.php *.ico *.svg *.txt
           
           # Solo comitear si hay cambios reales en los archivos
           git diff --quiet && git diff --staged --quiet || (git commit -m "chore: Auto-build React app for Ferozo deployment" && git push)
