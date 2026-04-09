@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // Configuración Ferozo / Correos
 $destinatario = "info@solutionswithang.com"; // A dónde llegará el correo
 $remitente_oficial = "info@solutionswithang.com"; // Debe ser un correo que exista en el Ferozo
-$asunto_prefijo = "[Web Contacto] - ";
+$asunto_prefijo = "[Web Contact] - ";
 
 // Obtener los datos crudos (JSON que enviará Axios/Fetch desde React)
 $rawData = file_get_contents("php://input");
@@ -35,7 +35,7 @@ if (empty($data['name']) || empty($data['email']) || empty($data['message'])) {
 // Sanitizar Entradas (Proteger contra XSS y saltos de línea maliciosos)
 $nombre = htmlspecialchars(strip_tags(trim($data['name'])));
 $email = filter_var(trim($data['email']), FILTER_SANITIZE_EMAIL);
-$motivo = isset($data['reason']) ? htmlspecialchars(strip_tags(trim($data['reason']))) : "Contacto general";
+$motivo = isset($data['reason']) ? htmlspecialchars(strip_tags(trim($data['reason']))) : "General Contact";
 $mensaje = htmlspecialchars(strip_tags(trim($data['message'])));
 
 // Validar formato de Email del usuario
@@ -52,15 +52,15 @@ $asunto_final = $asunto_prefijo . $motivo;
 $cuerpo_correo = "
 <html>
 <head>
-  <title>Nuevo mensaje desde Solutions With Ang</title>
+  <title>New message from Solutions With Ang</title>
 </head>
 <body style='font-family: Arial, sans-serif; color: #333;'>
-  <h2>Tienes un nuevo mensaje de contacto</h1>
-  <p><strong>Nombre:</strong> {$nombre}</p>
-  <p><strong>Email del contacto:</strong> <a href='mailto:{$email}'>{$email}</a></p>
-  <p><strong>Motivo:</strong> {$motivo}</p>
+  <h2>You have a new contact message</h2>
+  <p><strong>Name:</strong> {$nombre}</p>
+  <p><strong>Contact Email:</strong> <a href='mailto:{$email}'>{$email}</a></p>
+  <p><strong>Subject:</strong> {$motivo}</p>
   <hr style='border: none; border-top: 1px solid #ccc; margin: 20px 0;'>
-  <p><strong>Mensaje:</strong></p>
+  <p><strong>Message:</strong></p>
   <p style='background-color: #f9f9f9; padding: 15px; border-radius: 5px; white-space: pre-wrap;'>{$mensaje}</p>
 </body>
 </html>
@@ -81,7 +81,7 @@ $correo_enviado = mail($destinatario, $asunto_final, $cuerpo_correo, $headers);
 // Responder a React
 if ($correo_enviado) {
     http_response_code(200);
-    echo json_encode(["success" => true, "message" => "¡Mensaje enviado correctamente! Ángela se pondrá en contacto pronto."]);
+    echo json_encode(["success" => true, "message" => "Message sent successfully! Angela will be in touch soon."]);
 } else {
     // Si Ferozo falla enviando el correo, retornamos un error 500 (Internal Server Error)
     http_response_code(500);
