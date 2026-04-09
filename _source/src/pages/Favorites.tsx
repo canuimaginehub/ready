@@ -2,6 +2,7 @@ import Layout from "@/components/Layout";
 import zinzinoImg from "@/assets/zinzino.png";
 import nucleogenexImg from "@/assets/nucleogenex.png";
 import essentialOilsImg from "@/assets/essential-oils.jpg";
+import glp3Img from "@/assets/glp3.jpg";
 import oliveBranch from "@/assets/olive-branch.png";
 
 const favorites = [
@@ -23,7 +24,7 @@ const favorites = [
     name: "GLP THREE Natural Drops",
     description: "Only 4 natural ingredients with no side-effects. A gentle, effective addition to your wellness routine that works with your body, not against it.",
     category: "Supplements",
-    image: null,
+    image: glp3Img,
     link: "https://solutionswithang.threeinternational.com",
   },
   {
