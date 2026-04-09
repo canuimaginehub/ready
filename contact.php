@@ -41,7 +41,7 @@ $mensaje = htmlspecialchars(strip_tags(trim($data['message'])));
 // Validar formato de Email del usuario
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(400); 
-    echo json_encode(["success" => false, "message" => "El formato del email no es válido."]);
+    echo json_encode(["success" => false, "message" => "The email format is invalid."]);
     exit();
 }
 
@@ -55,10 +55,10 @@ $cuerpo_correo = "
   <title>Nuevo mensaje desde Solutions With Ang</title>
 </head>
 <body style='font-family: Arial, sans-serif; color: #333;'>
-  <h2>Tienes un nuevo mensaje de contacto</h1>
-  <p><strong>Nombre:</strong> {$nombre}</p>
-  <p><strong>Email del contacto:</strong> <a href='mailto:{$email}'>{$email}</a></p>
-  <p><strong>Motivo:</strong> {$motivo}</p>
+  <h2>You have a new message from Solutions With Ang</h2>
+  <p><strong>Name:</strong> {$name}</p>
+  <p><strong>Email:</strong> <a href='mailto:{$email}'>{$email}</a></p>
+  <p><strong>Reason:</strong> {$reason}</p>
   <hr style='border: none; border-top: 1px solid #ccc; margin: 20px 0;'>
   <p><strong>Mensaje:</strong></p>
   <p style='background-color: #f9f9f9; padding: 15px; border-radius: 5px; white-space: pre-wrap;'>{$mensaje}</p>
@@ -66,7 +66,7 @@ $cuerpo_correo = "
 </html>
 ";
 
-// Headers obligatorios para correos HTML y para pasar los filtros de SPAM (Ferozo)
+// Mandatory headers for HTML emails and to pass SPAM filters
 $headers  = "MIME-Version: 1.0" . "\r\n";
 $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 // Esencial: El From TIENE que existir en el servidor
