@@ -7,7 +7,7 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
   // Si tu dominio principal (ej. midominio.com) apunta directamente a la carpeta /web, deja base como "/".
   // Si las personas entran a midominio.com/web, cambia esto a "/web/"
-  base: "/web/",
+  base: "/",
   server: {
     host: "::",
     port: 8080,
