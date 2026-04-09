@@ -55,12 +55,12 @@ $cuerpo_correo = "
   <title>Nuevo mensaje desde Solutions With Ang</title>
 </head>
 <body style='font-family: Arial, sans-serif; color: #333;'>
-  <h2>Tienes un nuevo mensaje de contacto</h1>
-  <p><strong>Nombre:</strong> {$nombre}</p>
-  <p><strong>Email del contacto:</strong> <a href='mailto:{$email}'>{$email}</a></p>
-  <p><strong>Motivo:</strong> {$motivo}</p>
+  <h2>You have a new contact message</h2>
+  <p><strong>Name:</strong> {$nombre}</p>
+  <p><strong>Contact Email:</strong> <a href='mailto:{$email}'>{$email}</a></p>
+  <p><strong>Subject:</strong> {$motivo}</p>
   <hr style='border: none; border-top: 1px solid #ccc; margin: 20px 0;'>
-  <p><strong>Mensaje:</strong></p>
+  <p><strong>Message:</strong></p>
   <p style='background-color: #f9f9f9; padding: 15px; border-radius: 5px; white-space: pre-wrap;'>{$mensaje}</p>
 </body>
 </html>
