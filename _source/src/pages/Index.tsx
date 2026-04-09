@@ -3,7 +3,7 @@ import Layout from "@/components/Layout";
 import heroBg from "@/assets/hero-bg.jpg";
 import oliveBranch from "@/assets/olive-branch.png";
 import lifestyleFlatlay from "@/assets/lifestyle-flatlay.jpg";
-import angelaLong from "@/assets/angela-long.jpg";
+import angelaFocus from "@/assets/angela-focus.jpg";
 import {
   Accordion,
   AccordionContent,
@@ -92,7 +92,7 @@ const Index = () => {
             <div>
               {/* Placeholder for Angela's photo */}
               <div className="aspect-[3/4] rounded-lg border-2 border-border overflow-hidden">
-                <img src={angelaLong} alt="Angela Brazier" className="w-full h-full object-cover" />
+                <img src={angelaFocus} alt="Angela Brazier" className="w-full h-full object-cover" />
               </div>
             </div>
             <div>
