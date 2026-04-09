@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
-import angelaFocus from "@/assets/angela-focus.jpg";
+import angelaLong from "@/assets/angela-long.jpg";
 import oliveBranch from "@/assets/olive-branch.png";
 
 const Services = () => {
@@ -29,7 +29,7 @@ const Services = () => {
               </Link>
             </div>
             <div className="aspect-[3/4] rounded-lg overflow-hidden border-2 border-border">
-              <img src={angelaFocus} alt="Angela Brazier" className="w-full h-full object-cover" />
+              <img src={angelaLong} alt="Angela Brazier" className="w-full h-full object-cover" />
             </div>
           </div>
         </div>
