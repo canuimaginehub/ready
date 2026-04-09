@@ -22,7 +22,7 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/contact.php", {
+      const response = await fetch("/web/contact.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
