@@ -1,90 +1,90 @@
 <?php
-// Permitir peticiones desde nuestro origen
+// Strictly allow requests from our origin
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json; charset=UTF-8");
 
-// Manejar peticiones OPTIONS pre-flight (importante para Fetch/Axios en React)
+// Handle OPTIONS pre-flight requests (important for Fetch/Axios in React)
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
-// Configuración Ferozo / Correos
-$destinatario = "info@solutionswithang.com"; // A dónde llegará el correo
-$remitente_oficial = "info@solutionswithang.com"; // Debe ser un correo que exista en el Ferozo
-$asunto_prefijo = "[Web Contacto] - ";
+// Mail server / Routing configuration
+$recipient_email = "info@solutionswithang.com"; // Where the email will arrive
+$official_sender = "info@solutionswithang.com"; // Must be an email that exists in the hosting server
+$subject_prefix = "[Web Contact] - ";
 
-// Obtener los datos crudos (JSON que enviará Axios/Fetch desde React)
+// Get raw data (JSON that Axios/Fetch will send from React)
 $rawData = file_get_contents("php://input");
 $data = json_decode($rawData, true);
 
-// Si php://input está vacío (fallback para formularios x-www-form-urlencoded por las dudas)
+// If php://input is empty (fallback for x-www-form-urlencoded forms just in case)
 if (empty($data)) {
     $data = $_POST;
 }
 
-// Validar que se enviaron los datos mínimos requeridos
+// Validate that the minimum required data was sent
 if (empty($data['name']) || empty($data['email']) || empty($data['message'])) {
     http_response_code(400); // 400 Bad Request
-    echo json_encode(["success" => false, "message" => "Faltan campos obligatorios. ¡Por favor complete nombre, email y mensaje!"]);
+    echo json_encode(["success" => false, "message" => "Missing required fields. Please complete your name, email, and message!"]);
     exit();
 }
 
-// Sanitizar Entradas (Proteger contra XSS y saltos de línea maliciosos)
-$nombre = htmlspecialchars(strip_tags(trim($data['name'])));
+// Sanitize Inputs (Protect against XSS and malicious line breaks)
+$name = htmlspecialchars(strip_tags(trim($data['name'])));
 $email = filter_var(trim($data['email']), FILTER_SANITIZE_EMAIL);
-$motivo = isset($data['reason']) ? htmlspecialchars(strip_tags(trim($data['reason']))) : "Contacto general";
-$mensaje = htmlspecialchars(strip_tags(trim($data['message'])));
+$reason = isset($data['reason']) ? htmlspecialchars(strip_tags(trim($data['reason']))) : "General Contact";
+$message_body = htmlspecialchars(strip_tags(trim($data['message'])));
 
-// Validar formato de Email del usuario
+// Validate user's Email format
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(400); 
-    echo json_encode(["success" => false, "message" => "El formato del email no es válido."]);
+    echo json_encode(["success" => false, "message" => "The email format is invalid."]);
     exit();
 }
 
-// Armar el Asunto del Correo
-$asunto_final = $asunto_prefijo . $motivo;
+// Build the final Email Subject
+$final_subject = $subject_prefix . $reason;
 
-// Armar el Cuerpo del Correo en HTML
-$cuerpo_correo = "
+// Build the HTML Email Body
+$email_html = "
 <html>
 <head>
-  <title>Nuevo mensaje desde Solutions With Ang</title>
+  <title>New message from Solutions With Ang</title>
 </head>
 <body style='font-family: Arial, sans-serif; color: #333;'>
-  <h2>Tienes un nuevo mensaje de contacto</h1>
-  <p><strong>Nombre:</strong> {$nombre}</p>
-  <p><strong>Email del contacto:</strong> <a href='mailto:{$email}'>{$email}</a></p>
-  <p><strong>Motivo:</strong> {$motivo}</p>
+  <h2>You have a new message from Solutions With Ang</h2>
+  <p><strong>Name:</strong> {$name}</p>
+  <p><strong>Email:</strong> <a href='mailto:{$email}'>{$email}</a></p>
+  <p><strong>Reason:</strong> {$reason}</p>
   <hr style='border: none; border-top: 1px solid #ccc; margin: 20px 0;'>
-  <p><strong>Mensaje:</strong></p>
-  <p style='background-color: #f9f9f9; padding: 15px; border-radius: 5px; white-space: pre-wrap;'>{$mensaje}</p>
+  <p><strong>Message:</strong></p>
+  <p style='background-color: #f9f9f9; padding: 15px; border-radius: 5px; white-space: pre-wrap;'>{$message_body}</p>
 </body>
 </html>
 ";
 
-// Headers obligatorios para correos HTML y para pasar los filtros de SPAM (Ferozo)
+// Mandatory headers for HTML emails and to pass SPAM filters
 $headers  = "MIME-Version: 1.0" . "\r\n";
 $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-// Esencial: El From TIENE que existir en el servidor
-$headers .= "From: Solutions With Ang Web <{$remitente_oficial}>" . "\r\n";
-// El Reply-TO hace que al darle "Responder" en tu cliente de correo, vaya al email del visitante
-$headers .= "Reply-To: {$nombre} <{$email}>" . "\r\n";
+// Essential: The From email MUST exist on the server
+$headers .= "From: Solutions With Ang Web <{$official_sender}>" . "\r\n";
+// Reply-TO ensures that clicking 'Reply' in your mail client goes to the visitor's email
+$headers .= "Reply-To: {$name} <{$email}>" . "\r\n";
 $headers .= "X-Mailer: PHP/" . phpversion();
 
-// Intentar enviar el correo mediante la función nativa de PHP local
-$correo_enviado = mail($destinatario, $asunto_final, $cuerpo_correo, $headers);
+// Attempt to send the email using local PHP mail native function
+$email_sent = mail($recipient_email, $final_subject, $email_html, $headers);
 
-// Responder a React
-if ($correo_enviado) {
+// Respond to React
+if ($email_sent) {
     http_response_code(200);
-    echo json_encode(["success" => true, "message" => "¡Mensaje enviado correctamente! Ángela se pondrá en contacto pronto."]);
+    echo json_encode(["success" => true, "message" => "Message sent successfully! Angela will be in touch soon."]);
 } else {
-    // Si Ferozo falla enviando el correo, retornamos un error 500 (Internal Server Error)
+    // If the server fails to send the email, we return a 500 error (Internal Server Error)
     http_response_code(500);
-    echo json_encode(["success" => false, "message" => "Hubo un error interno en el servidor enviando el correo. Por favor, inténtalo más tarde o contáctanos directamente."]);
+    echo json_encode(["success" => false, "message" => "An internal server error occurred. Please try again later or contact us directly."]);
 }
 ?>
