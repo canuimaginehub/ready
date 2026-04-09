@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
-import oliveBranch from "@/assets/olive-branch.png";
+import angelaFocus from "@/assets/angela-focus.jpg";
+import angfam from "@/assets/angfam.jpg";
+import family from "@/assets/family.jpg";
+import angandjefyoung from "@/assets/angandjefyoung.jpg";
+import angndcos from "@/assets/angndcos.jpg";
 
 const About = () => {
   return (
@@ -9,12 +13,9 @@ const About = () => {
       <section className="py-20 px-4 bg-secondary">
         <div className="container mx-auto max-w-5xl">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Photo placeholder */}
-            <div className="aspect-square rounded-lg bg-mediterranean-light border-2 border-border overflow-hidden flex items-center justify-center order-2 md:order-1">
-              <div className="text-center p-8">
-                <img src={oliveBranch} alt="" className="w-16 mx-auto mb-4 opacity-50" />
-                <p className="font-body text-sm text-muted-foreground italic">Angela's Photo Here</p>
-              </div>
+            {/* Angela's photo */}
+            <div className="aspect-square rounded-lg border-2 border-border overflow-hidden order-2 md:order-1">
+              <img src={angelaFocus} alt="Angela Brazier" className="w-full h-full object-cover" />
             </div>
 
             <div className="order-1 md:order-2">
@@ -63,19 +64,24 @@ const About = () => {
         </div>
       </section>
 
-      {/* Family / Lifestyle placeholders */}
+      {/* Family / Lifestyle photos */}
       <section className="py-16 px-4 bg-secondary">
         <div className="container mx-auto max-w-5xl">
           <h2 className="font-display text-3xl font-bold text-foreground mb-8 text-center">
             Life with the Braziers
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {["Family Photo 1", "Family Photo 2", "Lifestyle Photo", "Kitchen / Cooking"].map((label) => (
+            {[
+              { src: angfam, alt: "Angela with her family" },
+              { src: family, alt: "The Brazier family" },
+              { src: angandjefyoung, alt: "Angela and Jeff when young" },
+              { src: angndcos, alt: "Angela with her dogs" },
+            ].map((photo) => (
               <div
-                key={label}
-                className="aspect-square rounded-lg bg-mediterranean-light border border-border flex items-center justify-center"
+                key={photo.alt}
+                className="aspect-square rounded-lg border border-border overflow-hidden"
               >
-                <p className="font-body text-xs text-muted-foreground italic text-center px-4">{label}</p>
+                <img src={photo.src} alt={photo.alt} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               </div>
             ))}
           </div>

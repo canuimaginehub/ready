@@ -3,6 +3,7 @@ import Layout from "@/components/Layout";
 import heroBg from "@/assets/hero-bg.jpg";
 import oliveBranch from "@/assets/olive-branch.png";
 import lifestyleFlatlay from "@/assets/lifestyle-flatlay.jpg";
+import angelaLong from "@/assets/angela-long.jpg";
 import {
   Accordion,
   AccordionContent,
@@ -90,11 +91,8 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               {/* Placeholder for Angela's photo */}
-              <div className="aspect-[3/4] rounded-lg bg-mediterranean-light border-2 border-border overflow-hidden flex items-center justify-center">
-                <div className="text-center p-8">
-                  <img src={oliveBranch} alt="" className="w-16 mx-auto mb-4 opacity-50" />
-                  <p className="font-body text-sm text-muted-foreground italic">Angela's Photo Here</p>
-                </div>
+              <div className="aspect-[3/4] rounded-lg border-2 border-border overflow-hidden">
+                <img src={angelaLong} alt="Angela Brazier" className="w-full h-full object-cover" />
               </div>
             </div>
             <div>

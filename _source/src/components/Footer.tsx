@@ -22,6 +22,7 @@ const Footer = () => {
               {[
                 { label: "Home", path: "/" },
                 { label: "About Angela", path: "/about" },
+                { label: "Work With Me", path: "/services" },
                 { label: "Blog", path: "/blog" },
                 { label: "My Favorites", path: "/favorites" },
                 { label: "Contact", path: "/contact" },
